@@ -87,7 +87,7 @@ class _SignUpState extends State<SignUp> {
                     onPressed: () async{
                       if(_formKey.currentState!.validate()){
                         _register();
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
+
 
                       }
 
@@ -126,6 +126,7 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           _success = true;
           _userEmail = user.email;
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
           clear();
         });
       } else {
@@ -135,9 +136,25 @@ class _SignUpState extends State<SignUp> {
       }
     } catch (e) {
       print('Error: $e');
-      setState(() {
-        _success = false;
-      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Error"),
+              content: Text("E-mail ID already exist"),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+      // setState(() {
+      //   _success = false;
+      // });
     }
   }
 
