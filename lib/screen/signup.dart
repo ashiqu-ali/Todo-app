@@ -135,7 +135,6 @@ class _SignUpState extends State<SignUp> {
         });
       }
     } catch (e) {
-      print('Error: $e');
       showDialog(
           context: context,
           builder: (BuildContext context) {

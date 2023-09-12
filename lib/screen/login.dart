@@ -106,60 +106,28 @@ class _LoginState extends State<Login> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-
+      print('hello');
+      final user = userCredential.user;
       if (user != null) {
-        setState(() {
+
           _success = true;
           _userEmail = user.email;
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
-          clear();
-        });
+          _emailController.clear();
+          _passwordController.clear();
+
       } else {
-        setState(() {
+
           _success = false;
-        });
+
       };
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        return 'Wrong password provided for that user.';
-      } else {
-        return e.message;
-      }
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-
-      );
-      print(userCredential);
-      final user = userCredential.user;
-      print('\n\npush');
-
-      if (user != null) {
-        setState(() {
-          _success = true;
-          _userEmail = user.email;
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
-          clear();
-        });
-      } else {
-        setState(() {
-          _success = false;
-        });
-      }
-    } catch (e) {
-      print('Error: $e');
       showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("Error"),
-              content: Text(e.toString()),
+              content: Text("Check E-mail ID/Password!"),
               actions: [
                 TextButton(
                   child: Text("Ok"),
@@ -172,16 +140,13 @@ class _LoginState extends State<Login> {
           });
       // setState(() {
       //   _success = false;
-      // });
+      // }
+    }catch(e){
+      print('Error : $e');
     }
   }
-
-  void clear() {
-    super.dispose();
-    _nameController.clear();
-    _emailController.clear();
-    _passwordController.clear();
-  }
 }
+
+
 
 
