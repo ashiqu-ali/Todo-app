@@ -21,6 +21,7 @@ class _SignUpState extends State<SignUp> {
   bool? _success;
   String? _userEmail;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,8 +87,11 @@ class _SignUpState extends State<SignUp> {
                     onPressed: () async{
                       if(_formKey.currentState!.validate()){
                         _register();
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
+
                       }
-                      await Navigator.push(context, MaterialPageRoute(builder: (context)=>Todo()));
+
+
                     },
                     child: Text('Register!', style: TextStyle(fontSize: 23),),
                   ),
@@ -122,6 +126,7 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           _success = true;
           _userEmail = user.email;
+          clear();
         });
       } else {
         setState(() {
@@ -134,5 +139,12 @@ class _SignUpState extends State<SignUp> {
         _success = false;
       });
     }
+  }
+
+  void clear() {
+    super.dispose();
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
   }
 }
