@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PopupContent extends StatefulWidget {
+class UpdatePopup extends StatefulWidget {
+  final String title;
+  final String sub;
+  final String id;
+
+  const UpdatePopup({Key? key, required this.title, required this.sub, required this.id})
+      : super(key: key);
+
   @override
-  State<PopupContent> createState() => _PopupContentState();
+  State<UpdatePopup> createState() => _UpdatePopupState();
 }
 
-class _PopupContentState extends State<PopupContent> {
+class _UpdatePopupState extends State<UpdatePopup> {
   final CollectionReference data = FirebaseFirestore.instance.collection('Datas');
 
-  final TextEditingController _title = TextEditingController();
-  final TextEditingController _subtitle = TextEditingController();
+  late TextEditingController _title;
+  late TextEditingController _subtitle;
 
-  void addData() {
+  @override
+  void initState() {
+    super.initState();
+    _title = TextEditingController(text: widget.title);
+    _subtitle = TextEditingController(text: widget.sub);
+  }
+
+  void updateData(String id) async {
     final dat = {
       'Title': _title.text,
       'Subtitle': _subtitle.text,
     };
-
-    data.add(dat);
+    await data.doc(id).update(dat);
   }
 
   @override
@@ -52,10 +65,10 @@ class _PopupContentState extends State<PopupContent> {
                   const SizedBox(height: 25),
                   ElevatedButton(
                     onPressed: () {
-                      addData();
+                      updateData(widget.id);
                       Navigator.of(context).pop();
                     },
-                    child: const Text('ADD'),
+                    child: const Text('UPDATE'),
                   )
                 ],
               ),
